@@ -32,8 +32,15 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // I can find on these e-shops
 // 2. Log the variable
 
+var tshirts = marketplace.filter(({ name }) => name.toLowerCase().includes('t-shirt') ||  name.toLowerCase().includes('tshirt'));
 
+tshirts.sort(function(a, b) 
+{
+  return a.price < b.price;
+});
 
+var cheapest_tshirt_link = tshirts[0].link;
+console.log(cheapest_tshirt_link);
 
 
 /**
@@ -49,11 +56,24 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 1. Create a variable and assign it the number of products
 // 2. Log the variable
 
+var count_products = marketplace.length;
+console.log(count_products);
+
+
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
 // 2. Log the variable
 // 3. Log how many brands we have
+
+var brands = marketplace.map(function(item)
+{
+    return item.brand; 
+})
+console.log(brands);
+var count_brands = new Set(brands).size;
+console.log(count_brands);
+
 
 
 // 🎯 TODO: Sort by price
@@ -61,24 +81,52 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 2. Create a variable and assign it the list of products by price from lowest to highest
 // 3. Log the variable
 
+function sort_by_price(array)
+{
+  return array.sort(function(a, b) 
+  {
+    return parseFloat(a.price) - parseFloat(b.price);
+  });
+}
+
+const sorted_products_price = sort_by_price(marketplace);
+console.log(sorted_products_price);
+
+
 
 // 🎯 TODO: Sort by date
 // 1. Create a function to sort the marketplace objects by products date
 // 2. Create a variable and assign it the list of products by date from recent to old
 // 3. Log the variable
 
+function sort_by_date(array)
+{
+  return array.sort(function(a, b) 
+  {
+    return new Date(b.date) - new Date(a.date);
+  });
+}
+
+const sorted_products_date = sort_by_date(marketplace);
+console.log(sorted_products_date);
+
+
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
 // 2. Log the list
+
+const products_range = marketplace.filter(({ price }) => price >= 50 && price <= 100);
+console.log(products_range);
+
 
 
 // 🎯 TODO: Average Basket
 // 1. Determine the average basket of the marketplace
 // 2. Log the average
 
-
-
+const avg = marketplace.reduce((previous, current) => previous + current.price, 0) / marketplace.length;
+console.log(avg);
 
 
 /**
