@@ -81,9 +81,9 @@ console.log(count_brands);
 // 2. Create a variable and assign it the list of products by price from lowest to highest
 // 3. Log the variable
 
-function sort_by_price(array)
+function sort_by_price(items)
 {
-  return array.sort(function(a, b) 
+  return items.sort(function(a, b) 
   {
     return parseFloat(a.price) - parseFloat(b.price);
   });
@@ -99,9 +99,9 @@ console.log(sorted_products_price);
 // 2. Create a variable and assign it the list of products by date from recent to old
 // 3. Log the variable
 
-function sort_by_date(array)
+function sort_by_date(items)
 {
-  return array.sort(function(a, b) 
+  return items.sort(function(a, b) 
   {
     return new Date(b.date) - new Date(a.date);
   });
