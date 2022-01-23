@@ -275,20 +275,37 @@ const COTELE_PARIS = [
 // // 1. Log if we have new products only (true or false)
 // // A new product is a product `released` less than 2 weeks.
 
+const new_cotele = COTELE_PARIS.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) < 2);
+console.log(new_cotele.length == COTELE_PARIS.length);
+
+
 
 // 🎯 TODO: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
 // // A reasonable price if all the products are less than 100€
+
+const cheap_cotele = COTELE_PARIS.filter(({ price }) => price < 100);
+console.log(cheap_cotele.length == COTELE_PARIS.length);
+
 
 
 // 🎯 TODO: Find a specific product
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the product
 
+const a_product_cotele = COTELE_PARIS.filter(({ uuid }) => uuid == 'b56c6d88-749a-5b4c-b571-e5b5c6483131')[0];
+console.log(a_product_cotele);
+
+
 
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the new list of product
+
+const UPDATED_COTELE_PARIS = COTELE_PARIS.filter(({ uuid }) => uuid != 'b56c6d88-749a-5b4c-b571-e5b5c6483131');
+console.log(UPDATED_COTELE_PARIS);
+
+
 
 // 🎯 TODO: Save the favorite product
 let blueJacket = {
@@ -304,7 +321,14 @@ let jacket = blueJacket;
 jacket.favorite = true;
 
 // 1. Log `blueJacket` and `jacket` variables
+
+console.log(blueJacket);
+console.log(jacket);
+
 // 2. What do you notice?
+
+// I notice that the inital array `blueJacket` was also updated, because the `jacket` array is
+// in fact a mere pointer to the same oject as `blueJacket`
 
 blueJacket = {
   'link': 'https://coteleparis.com/collections/tous-les-produits-cotele/products/la-veste-bleu-roi',
@@ -314,7 +338,11 @@ blueJacket = {
 
 // 3. Update `jacket` property with `favorite` to true WITHOUT changing blueJacket properties
 
+jacket = {...blueJacket};
+jacket.favorite = true;
 
+console.log(blueJacket);
+console.log(jacket);
 
 
 
@@ -327,3 +355,6 @@ blueJacket = {
 // 🎯 TODO: Save in localStorage
 // 1. Save MY_FAVORITE_BRANDS in the localStorage
 // 2. log the localStorage
+
+window.localStorage.setItem("MY_FAVORITE_BRANDS", JSON.stringify(MY_FAVORITE_BRANDS));
+console.log(localStorage);
