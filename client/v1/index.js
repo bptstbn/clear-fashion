@@ -66,12 +66,12 @@ console.log(count_products);
 // 2. Log the variable
 // 3. Log how many brands we have
 
-var brands = marketplace.map(function(item)
+var item_brands = marketplace.map(function(item)
 {
     return item.brand; 
 })
-console.log(brands);
-var count_brands = new Set(brands).size;
+console.log(item_brands);
+var count_brands = new Set(item_brands).size;
 console.log(count_brands);
 
 
@@ -129,6 +129,7 @@ const avg = marketplace.reduce((previous, current) => previous + current.price, 
 console.log(avg);
 
 
+
 /**
  * 🏎
  * We are almost done with the `marketplace` variable
@@ -152,17 +153,31 @@ console.log(avg);
 // 2. Log the variable
 // 3. Log the number of products by brands
 
+var brands = new Object();
+item_brands.forEach(brand => brands[brand] = [])
+
+marketplace.forEach(item => brands[item.brand].push(item));
+console.log(brands);
+
+Object.keys(brands).forEach(key => console.log(key + ' : ' + Object.keys(brands[key]).length))
+
+
 
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
+
+Object.keys(brands).forEach(key => brands[key] = sort_by_price(brands[key]).reverse())
+console.log(brands)
+
 
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
 // 2. Log the sort
 
-
+Object.keys(brands).forEach(key => brands[key] = sort_by_date(brands[key]).reverse())
+console.log(brands)
 
 
 
@@ -177,7 +192,14 @@ console.log(avg);
 // 1. Compute the p90 price value of each brand
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
 
+function pvalue(items, x)
+{
+  items = sort_by_price(items);
+  var p = Math.floor(Object.keys(items).length*(1-x)) - 1;
+  return items[p]['price'];
+}
 
+Object.keys(brands).forEach(key => console.log(key + ' : ' + pvalue(brands[key], 0.9)))
 
 
 
