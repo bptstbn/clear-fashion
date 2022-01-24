@@ -8,6 +8,7 @@ let currentPagination = {};
 // instantiate the selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
+const selectSort = document.querySelector('#sort-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 
@@ -111,10 +112,11 @@ const render = (products, pagination) => {
  * @type {[type]}
  */
 selectShow.addEventListener('change', event => {
-  fetchProducts(currentPagination.currentPage, parseInt(event.target.value))
+  fetchProducts(1, parseInt(event.target.value))
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
 });
+
 
 document.addEventListener('DOMContentLoaded', async () => {
   const products = await fetchProducts();
@@ -129,3 +131,29 @@ selectPage.addEventListener('change', event => {
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
 });
+
+
+
+
+/*
+
+function sort_by_price(items)
+{
+  return items.sort(function(a, b) 
+  {
+    return parseFloat(a.price) - parseFloat(b.price);
+  });
+}
+
+
+selectSort.addEventListener('change', event => {
+  var previousPagination  = Object.assign(currentPagination);
+  if (event.target.value == 'price-desc')
+  {
+    fetchProducts(1, currentPagination.count)
+    .then(setCurrentProducts)
+    .then(() => render(sort_by_price(currentProducts).reverse(), previousPagination));
+  };
+});
+
+*/
