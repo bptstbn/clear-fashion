@@ -121,8 +121,8 @@ console.log(products_range);
 
 
 
-// 🎯 TODO: Average Basket
-// 1. Determine the average basket of the marketplace
+// 🎯 TODO: Average price
+// 1. Determine the average price of the marketplace
 // 2. Log the average
 
 const avg = marketplace.reduce((previous, current) => previous + current.price, 0) / marketplace.length;
