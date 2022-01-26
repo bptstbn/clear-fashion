@@ -44,6 +44,7 @@ const fetchProducts = async (page = 1, size = 12) => {
     }
     var result = body.data.result;
     var meta = body.data.meta;
+    // apply filters
     if (filter == 'price')
     {
       result = result.filter(({ price }) => price <= 100);
@@ -52,13 +53,22 @@ const fetchProducts = async (page = 1, size = 12) => {
     {
       result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) < 2);
     }
+    // apply sorts
     if (sort == 'price-asc')
     {
       result = sort_by_price(result);
     }
-    if (sort == 'price-desc')
+    else if (sort == 'price-desc')
     {
       result = sort_by_price(result).reverse();
+    }
+    else if (sort == 'date-asc')
+    {
+      result = sort_by_date(result);
+    }
+    else if (sort == 'date-desc')
+    {
+      result = sort_by_date(result).reverse();
     }
     meta.count = result.length;
     console.log(meta.count);
@@ -212,5 +222,13 @@ function sort_by_price(items)
   return items.sort(function(a, b) 
   {
     return parseFloat(a.price) - parseFloat(b.price);
+  });
+}
+
+function sort_by_date(items)
+{
+  return items.sort(function(a, b) 
+  {
+    return new Date(b.released) - new Date(a.released);
   });
 }
