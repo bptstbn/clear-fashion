@@ -48,6 +48,10 @@ const fetchProducts = async (page = 1, size = 12) => {
     {
       result = result.filter(({ price }) => price <= 100);
     }
+    if (filter == 'date')
+    {
+      result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) < 2);
+    }
     meta.count = result.length;
     console.log(meta.count);
     body.data = {result, meta};
@@ -159,7 +163,6 @@ selectPage.addEventListener('change', event => {
 
 function filterPrice()
 {
-  console.log("On est dans la fonction");
   if (filter != 'price')
   {
     filter = 'price';
@@ -168,12 +171,25 @@ function filterPrice()
   {
     filter = 'none';
   }
-  console.log(filter);
-  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+  fetchProducts(1, currentPagination.pageSize)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
 }
 
+function filterDate()
+{
+  if (filter != 'date')
+  {
+    filter = 'date';
+  }
+  else
+  {
+    filter = 'none';
+  }
+  fetchProducts(1, currentPagination.pageSize)
+    .then(setCurrentProducts)
+    .then(() => render(currentProducts, currentPagination));
+}
 
 /*
 function sort_by_price(items)
