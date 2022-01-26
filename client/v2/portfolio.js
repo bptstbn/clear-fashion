@@ -6,6 +6,7 @@ let currentProducts = [];
 let currentPagination = {};
 
 let filter = 'none';
+let sort = 'none';
 
 // instantiate the selectors
 const selectShow = document.querySelector('#show-select');
@@ -40,17 +41,24 @@ const fetchProducts = async (page = 1, size = 12) => {
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
-    }   
-    // console.log(body.data);
+    }
     var result = body.data.result;
     var meta = body.data.meta;
     if (filter == 'price')
     {
       result = result.filter(({ price }) => price <= 100);
     }
-    if (filter == 'date')
+    else if (filter == 'date')
     {
       result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) < 2);
+    }
+    if (sort == 'price-asc')
+    {
+      result = sort_by_price(result);
+    }
+    if (sort == 'price-desc')
+    {
+      result = sort_by_price(result).reverse();
     }
     meta.count = result.length;
     console.log(meta.count);
@@ -191,7 +199,14 @@ function filterDate()
     .then(() => render(currentProducts, currentPagination));
 }
 
-/*
+
+selectSort.addEventListener('change', event => {
+  sort = event.target.value;
+  fetchProducts(1, currentPagination.pageSize)
+    .then(setCurrentProducts)
+    .then(() => render(currentProducts, currentPagination));
+});
+
 function sort_by_price(items)
 {
   return items.sort(function(a, b) 
@@ -199,4 +214,3 @@ function sort_by_price(items)
     return parseFloat(a.price) - parseFloat(b.price);
   });
 }
-*/
