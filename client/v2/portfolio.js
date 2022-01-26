@@ -5,6 +5,8 @@
 let currentProducts = [];
 let currentPagination = {};
 
+let filter = 'none';
+
 // instantiate the selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
@@ -31,21 +33,43 @@ const setCurrentProducts = ({result, meta}) => {
 const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
+      `https://clear-fashion-api.vercel.app?page=${1}&size=${139}`
     );
     const body = await response.json();
 
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
+    }   
+    // console.log(body.data);
+    var result = body.data.result;
+    var meta = body.data.meta;
+    if (filter == 'price')
+    {
+      result = result.filter(({ price }) => price <= 100);
     }
-
-    return body.data;
+    meta.count = result.length;
+    console.log(meta.count);
+    body.data = {result, meta};
+    return sliceProducts(body.data, page, size);
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
   }
 };
+
+function sliceProducts(products, page, size)
+{
+  var result = products.result;
+  result = result.slice((page-1)*size, page*size);
+  var meta = products.meta;
+  meta.currentPage = page;
+  meta.pageSize = size;
+  meta.pageCount = Math.floor(1+meta.count/meta.pageSize);
+  var items = {result, meta};
+  return items;
+}
+
 
 /**
  * Render list of products
@@ -133,10 +157,25 @@ selectPage.addEventListener('change', event => {
 });
 
 
+function filterPrice()
+{
+  console.log("On est dans la fonction");
+  if (filter != 'price')
+  {
+    filter = 'price';
+  }
+  else
+  {
+    filter = 'none';
+  }
+  console.log(filter);
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+    .then(setCurrentProducts)
+    .then(() => render(currentProducts, currentPagination));
+}
 
 
 /*
-
 function sort_by_price(items)
 {
   return items.sort(function(a, b) 
@@ -144,16 +183,4 @@ function sort_by_price(items)
     return parseFloat(a.price) - parseFloat(b.price);
   });
 }
-
-
-selectSort.addEventListener('change', event => {
-  var previousPagination  = Object.assign(currentPagination);
-  if (event.target.value == 'price-desc')
-  {
-    fetchProducts(1, currentPagination.count)
-    .then(setCurrentProducts)
-    .then(() => render(sort_by_price(currentProducts).reverse(), previousPagination));
-  };
-});
-
 */
