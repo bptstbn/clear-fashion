@@ -5,13 +5,16 @@
 let currentProducts = [];
 let currentPagination = {};
 
-let filter = 'none';
+let filterPrice = 'none';
+let filterDate = 'none';
 let sort = 'none';
 
 // instantiate the selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const selectSort = document.querySelector('#sort-select');
+const selectFilterPrice = document.querySelector('#filter-price-select');
+const selectFilterDate = document.querySelector('#filter-date-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 
@@ -44,32 +47,9 @@ const fetchProducts = async (page = 1, size = 12) => {
     }
     var result = body.data.result;
     var meta = body.data.meta;
-    // apply filters
-    if (filter == 'price')
-    {
-      result = result.filter(({ price }) => price <= 100);
-    }
-    else if (filter == 'date')
-    {
-      result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) < 2);
-    }
-    // apply sorts
-    if (sort == 'price-asc')
-    {
-      result = sort_by_price(result);
-    }
-    else if (sort == 'price-desc')
-    {
-      result = sort_by_price(result).reverse();
-    }
-    else if (sort == 'date-asc')
-    {
-      result = sort_by_date(result);
-    }
-    else if (sort == 'date-desc')
-    {
-      result = sort_by_date(result).reverse();
-    }
+    result = filterProductsByPrice(result);
+    result = filterProductsByReleaseDate(result);
+    result = sortProducts(result);
     meta.count = result.length;
     console.log(meta.count);
     body.data = {result, meta};
@@ -92,7 +72,64 @@ function sliceProducts(products, page, size)
   return items;
 }
 
+function filterProductsByPrice(result)
+{
+  if (filterPrice == 'A')
+    {
+      result = result.filter(({ price }) => price <= 50);
+    }
+    else if (filterPrice == 'B')
+    {
+      result = result.filter(({ price }) => price > 50 && price <= 100);
+    }
+    else if (filterPrice == 'C')
+    {
+      result = result.filter(({ price }) => price > 100 && price <= 200);
+    }
+    else if (filterPrice == 'D')
+    {
+      result = result.filter(({ price }) => price > 200);
+    }
+    return result;
+}
 
+function filterProductsByReleaseDate(result)
+{
+  if (filterDate == 'A')
+    {
+      result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) <= 2);
+    }
+    else if (filterDate == 'B')
+    {
+      result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)).between(2, 26));
+    }
+    else if (filterDate == 'C')
+    {
+      result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) > 26);
+    }
+    return result;
+}
+
+function sortProducts(result)
+{
+  if (sort == 'price-asc')
+  {
+    result = sort_by_price(result);
+  }
+  else if (sort == 'price-desc')
+  {
+    result = sort_by_price(result).reverse();
+  }
+  else if (sort == 'date-asc')
+  {
+    result = sort_by_date(result);
+  }
+  else if (sort == 'date-desc')
+  {
+    result = sort_by_date(result).reverse();
+  }
+  return result;
+}
 /**
  * Render list of products
  * @param  {Array} products
@@ -178,37 +215,19 @@ selectPage.addEventListener('change', event => {
     .then(() => render(currentProducts, currentPagination));
 });
 
-
-function filterPrice()
-{
-  if (filter != 'price')
-  {
-    filter = 'price';
-  }
-  else
-  {
-    filter = 'none';
-  }
+selectFilterPrice.addEventListener('change', event => {
+  filterPrice = event.target.value;
   fetchProducts(1, currentPagination.pageSize)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
-}
+});
 
-function filterDate()
-{
-  if (filter != 'date')
-  {
-    filter = 'date';
-  }
-  else
-  {
-    filter = 'none';
-  }
+selectFilterDate.addEventListener('change', event => {
+  filterDate = event.target.value;
   fetchProducts(1, currentPagination.pageSize)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
-}
-
+});
 
 selectSort.addEventListener('change', event => {
   sort = event.target.value;
@@ -232,3 +251,10 @@ function sort_by_date(items)
     return new Date(b.released) - new Date(a.released);
   });
 }
+
+Number.prototype.between = function(a, b) 
+{
+  var min = Math.min.apply(Math, [a, b]);
+  var max = Math.max.apply(Math, [a, b]);
+  return this > min && this <= max;
+};
