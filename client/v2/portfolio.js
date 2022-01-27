@@ -148,19 +148,19 @@ function sortProducts(result)
 {
   if (sort == 'price-asc')
   {
-    result = sort_by_price(result);
+    result = sortByCheap(result);
   }
   else if (sort == 'price-desc')
   {
-    result = sort_by_price(result).reverse();
+    result = sortByCheap(result).reverse();
   }
   else if (sort == 'date-asc')
   {
-    result = sort_by_date(result);
+    result = sortByRecent(result);
   }
   else if (sort == 'date-desc')
   {
-    result = sort_by_date(result).reverse();
+    result = sortByRecent(result).reverse();
   }
   return result;
 }
@@ -225,7 +225,6 @@ const renderBrands = async(products) => {
     {
       selectedIndex = 0
     }
-    console.log(selectedIndex);
   }
   selectFilterBrand.selectedIndex = selectedIndex;
 };
@@ -306,7 +305,7 @@ selectSort.addEventListener('change', event => {
     .then(() => render(currentProducts, currentPagination));
 });
 
-function sort_by_price(items)
+function sortByCheap(items)
 {
   return items.sort(function(a, b) 
   {
@@ -314,7 +313,7 @@ function sort_by_price(items)
   });
 }
 
-function sort_by_date(items)
+function sortByRecent(items)
 {
   return items.sort(function(a, b) 
   {
