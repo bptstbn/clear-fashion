@@ -42,6 +42,11 @@ const selectFilterDate = document.querySelector('#filter-date-select');
 const selectFilterBrand = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const spanNbNewProducs = document.querySelector('#nbNewProducts');
+const spanP50 = document.querySelector('#p50');
+const spanP90 = document.querySelector('#p90');
+const spanP95 = document.querySelector('#p95');
+const spanLastReleasedDate = document.querySelector('#lastReleasedDate');
 
 /**
  * Set global value
@@ -229,21 +234,31 @@ const renderBrands = async(products) => {
   selectFilterBrand.selectedIndex = selectedIndex;
 };
 
+function pvalue(items, x)
+{
+  items = sortByCheap(items);
+  var p = Math.floor(items.length*(1-x));
+  return items[p]['price'];
+}
 
 /**
  * Render page selector
  * @param  {Object} pagination
  */
-const renderIndicators = pagination => {
+const renderIndicators = (products, pagination) => {
   const {count} = pagination;
-
   spanNbProducts.innerHTML = count;
+  spanNbNewProducs.innerHTML = products.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) <= 2).length;
+  spanP50.innerHTML = pvalue(products, 0.5);
+  spanP90.innerHTML = pvalue(products, 0.90);
+  spanP95.innerHTML = pvalue(products, 0.95);
+  spanLastReleasedDate.innerHTML = sortByRecent(products)[0].released;
 };
 
 const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
-  renderIndicators(pagination);
+  renderIndicators(products, pagination);
   renderBrands(products);
 };
 
