@@ -20,7 +20,8 @@ const parse = data => {
         $(element)
           .find('.productList-price')
           .text()
-      );
+      )
+      const brand = 'dedicated';
 
       return {name, price};
     })

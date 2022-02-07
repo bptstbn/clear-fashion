@@ -20,9 +20,10 @@ const parse = data => {
         $(element)
           .find('.price')
           .text()
-      );
+      )
+      const brand = 'montlimart';
 
-      return {name, price};
+      return {name, price, brand};
     })
     .get();
 };
