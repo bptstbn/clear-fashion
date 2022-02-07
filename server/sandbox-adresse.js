@@ -1,5 +1,5 @@
 /* eslint-disable no-console, no-process-exit */
-const dedicatedbrand = require('./sources/dedicatedbrand');
+const dedicatedbrand = require('./sources/adresse');
 
 async function sandbox (eshop = 'https://adresse.paris/630-toute-la-collection') {
   try {
