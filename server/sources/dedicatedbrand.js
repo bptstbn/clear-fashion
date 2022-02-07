@@ -23,7 +23,7 @@ const parse = data => {
       )
       const brand = 'dedicated';
 
-      return {name, price};
+      return {name, price, brand};
     })
     .get();
 };
