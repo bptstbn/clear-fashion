@@ -20,10 +20,12 @@ const parse = data => {
         $(element)
           .find('.price')
           .text()
-      )
+      );
+      const link = $(element)
+        .find('.product-name-container.versionpc .product-name')
+        .attr('href');
       const brand = 'adresse';
-
-      return {name, price, brand};
+      return {name, price, link, brand};
     })
     .get();
 };
