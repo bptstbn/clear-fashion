@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
+const homeurl = 'https://www.dedicatedbrand.com';
 
 /**
  * Parse webpage e-shop
@@ -20,10 +21,12 @@ const parse = data => {
         $(element)
           .find('.productList-price')
           .text()
-      )
+      );
+      const link = homeurl + $(element)
+        .find('.productList-link')
+        .attr('href');
       const brand = 'dedicated';
-
-      return {name, price, brand};
+      return {name, price, link, brand};
     })
     .get();
 };

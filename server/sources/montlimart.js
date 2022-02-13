@@ -20,7 +20,8 @@ const parse = data => {
         $(element)
           .find('.price')
           .text()
-      )
+      );
+      // scrape link
       const brand = 'montlimart';
 
       return {name, price, brand};
