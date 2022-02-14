@@ -268,13 +268,12 @@ const render = (products, pagination) => {
 
 /**
  * Select the number of products to display
- * @type {[type]}
  */
+
 selectShow.addEventListener('change', event => {
   fetchProducts(1, parseInt(event.target.value))
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
-});
 
 
 document.addEventListener('DOMContentLoaded', async () => {
