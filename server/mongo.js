@@ -21,6 +21,7 @@ async function main()
 
 
     const collection = db.collection('products');
+    console.log(collection);
     const result = collection.insertMany(products);
     console.log(result);
 
@@ -76,7 +77,7 @@ async function display()
     
     // find all products sorted by price
     var sort_price = { price: 1 };
-    //const products = await collection.find().sort(sort_price).toArray();
+    // const products = await collection.find().sort(sort_price).toArray();
 
     // display products
     console.log(products);
