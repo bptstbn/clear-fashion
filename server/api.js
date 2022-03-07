@@ -48,10 +48,10 @@ app.get("/products/:id", async (request, response) => {
 });
 
 
-app.get("/products/search:id", async (request, response) => {
+app.get("/products/search?brand", async (request, response) => {
   var collection = await get_collection();
   console.log(collection);
-  collection.findOne({ "_id": new ObjectId(request.params.id) }, (error, result) => {
+  collection.findAll({ "brand": request }, (error, result) => {
       if(error) {
           return response.status(500).send(error);
       }
