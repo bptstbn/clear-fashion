@@ -1,6 +1,6 @@
 /* eslint-disable no-console, no-process-exit */
 const dedicatedbrand = require('./sources/dedicatedbrand');
-save = require('./savefile');
+const mongo = require('./mongo')
 
 //async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/news') {
 async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/all-men') {
@@ -10,7 +10,7 @@ async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/all-men')
     const products = await dedicatedbrand.scrape(eshop);
 
     console.log(products);
-    save(products, 'dedicated');
+    await mongo.insert(products);
     console.log('done');
     process.exit(0);
   } catch (e) {
