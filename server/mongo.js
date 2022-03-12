@@ -1,7 +1,8 @@
 const fs = require('fs');
+require('dotenv').config()
 const {MongoClient} = require('mongodb');
-const MONGODB_URI = 'mongodb+srv://baptiste:1nIJqDVtew9teIHx@clear-fashion.j4yct.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-const MONGODB_DB_NAME = 'clearfashion';
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME;
 
 
 async function main() 
