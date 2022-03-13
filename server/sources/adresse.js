@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
+const {'v5': uuidv5} = require('uuid');
 
 /**
  * Parse webpage e-shop
@@ -21,11 +22,16 @@ const parse = data => {
           .find('.price')
           .text()
       );
-      const link = $(element)
+      var link = $(element)
         .find('.product-name-container.versionpc .product-name')
         .attr('href');
+      if (link == null)
+      {
+        link = 'undefined';
+      }
       const brand = 'adresse';
-      return {name, price, link, brand};
+      const _id = uuidv5(link, uuidv5.URL);
+      return {name, price, link, brand, _id};
     })
     .get();
 };

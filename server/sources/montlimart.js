@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
+const {'v5': uuidv5} = require('uuid');
 
 /**
  * Parse webpage e-shop
@@ -23,7 +24,7 @@ const parse = data => {
       );
       // scrape link
       const brand = 'montlimart';
-
+      // const id = uuidv5(link, uuidv5.URL);
       return {name, price, brand};
     })
     .get();

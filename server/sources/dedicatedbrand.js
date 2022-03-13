@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const homeurl = 'https://www.dedicatedbrand.com';
+const {'v5': uuidv5} = require('uuid');
 
 /**
  * Parse webpage e-shop
@@ -22,11 +23,16 @@ const parse = data => {
           .find('.productList-price')
           .text()
       );
-      const link = homeurl + $(element)
+      var link = homeurl + $(element)
         .find('.productList-link')
         .attr('href');
+      if (link == null)
+      {
+        link = 'undefined';
+      }
       const brand = 'dedicated';
-      return {name, price, link, brand};
+      const _id = uuidv5(link, uuidv5.URL);
+      return {name, price, link, brand, _id};
     })
     .get();
 };
