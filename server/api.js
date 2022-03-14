@@ -3,7 +3,10 @@ const express = require('express');
 const helmet = require('helmet');
 
 const {MongoClient} = require('mongodb');
-const ObjectId = require("mongodb").ObjectID;
+// const ObjectId = require("mongodb").ObjectID;
+
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME;
 
 const PORT = 8092;
 
@@ -25,9 +28,6 @@ app.listen(PORT);
 
 async function get_collection() 
 {
-  const MONGODB_URI = 'mongodb+srv://baptiste:1nIJqDVtew9teIHx@clear-fashion.j4yct.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-  const MONGODB_DB_NAME = 'clearfashion';
-
   const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
   const db =  client.db(MONGODB_DB_NAME);
   const collection = db.collection('products');
@@ -39,7 +39,7 @@ async function get_collection()
 app.get("/products/:id", async (request, response) => {
   var collection = await get_collection();
   console.log(collection);
-  collection.findOne({ "_id": new ObjectId(request.params.id) }, (error, result) => {
+  collection.findOne({ "_id": request.params.id }, (error, result) => {
       if(error) {
           return response.status(500).send(error);
       }
