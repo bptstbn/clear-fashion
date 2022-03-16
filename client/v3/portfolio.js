@@ -1,4 +1,4 @@
-const API_URL = 'https://clearf.vercel.app/';
+const API_URL = 'https://clearfashionapi.vercel.app/';
 
 const { calculateLimitAndOffset, paginate } = require('paginate-info');
 
