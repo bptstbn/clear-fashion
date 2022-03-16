@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const {MongoClient} = require('mongodb');
 // const ObjectId = require("mongodb").ObjectID;
 
+const { calculateLimitAndOffset, paginate } = require('paginate-info');
+
 require('dotenv').config()
 const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME;
@@ -51,14 +53,23 @@ app.get("/products/search/", async (request, response) => {
     limit = parseInt(request.query.limit);
   }
 
-  var brand = 'none';
+  var page = 1;
+  if ("page" in request.query) 
+  {
+    page = parseInt(request.query.page);
+  }
+
+  
+  const { offset } = calculateLimitAndOffset(page, limit);
+
+  var brand = null;
   if ('brand' in request.query)
   {
     brand = request.query.brand;
   }
   console.log(brand);
   
-  var price = Infinity;
+  var price = null;
   if ("price" in request.query)
   {
     price = parseInt(request.query.price);
@@ -66,21 +77,21 @@ app.get("/products/search/", async (request, response) => {
   
   try
   {
-    if (brand != 'none' & price != Infinity)
+    if (brand != null & price != null)
     {
-      products = await collection.find({ 'price' : { $lt: price }, 'brand' : brand }).limit(limit).toArray();
+      products = await collection.find({ 'price' : { $lt: price }, 'brand' : brand }).skip(offset).limit(limit).toArray();
     }
-    else if (brand != 'none')
+    else if (brand != null)
     {
-      products = await collection.find({ 'brand' : brand }).limit(limit).toArray();
+      products = await collection.find({ 'brand' : brand }).skip(offset).limit(limit).toArray();
     }
-    else if (price != Infinity)
+    else if (price != null)
     {
-      products = await collection.find({ 'price' : { $lt: price } }).limit(limit).toArray();
+      products = await collection.find({ 'price' : { $lt: price } }).skip(offset).limit(limit).toArray();
     }
     else
     {
-      products = await collection.find().limit(limit).toArray();
+      products = await collection.find().skip(offset).limit(limit).toArray();
     }
     console.log(products);
     response.send(products);
