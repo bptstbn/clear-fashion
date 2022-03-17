@@ -45,57 +45,64 @@ async function get_collection()
 app.get("/products/search/", async (request, response) => {
   var collection = await get_collection();
   console.log('In search route ...');
-  let products;
+
+  var filters = {};
 
   var limit = 12;
-  if ("limit" in request.query) 
+  if ('limit' in request.query) 
   {
     limit = parseInt(request.query.limit);
   }
 
   var page = 1;
-  if ("page" in request.query) 
+  if ('page' in request.query) 
   {
+    console.log('Reading page');
     page = parseInt(request.query.page);
+    console.log(page);
   }
 
-  
-  const { offset } = calculateLimitAndOffset(page, limit);
+  var sortby;
+  if ('sortby' in request.query) 
+  {
+    sortby = request.query.sortby;
+  }
 
-  var brand = null;
+  var sort = {name: 1} ;
+  switch (sortby)
+  {
+    case 'priceasc':
+      sort = {price: 1};
+      break;
+    case 'pricedesc':
+      sort = {price: -1};
+      break;
+  }
+
+  var brand;
   if ('brand' in request.query)
   {
     brand = request.query.brand;
+    filters['brand'] = brand;
   }
-  console.log(brand);
   
-  var price = null;
-  if ("price" in request.query)
+  var price;
+  if ('price' in request.query)
   {
     price = parseInt(request.query.price);
+    filters['price'] = { $lt: price };
   }
   
+  console.log(filters);
+
+  const { offset } = calculateLimitAndOffset(page, limit);
   try
   {
-    if (brand != null & price != null)
-    {
-      products = await collection.find({ 'price' : { $lt: price }, 'brand' : brand }).skip(offset).limit(limit).toArray();
-    }
-    else if (brand != null)
-    {
-      products = await collection.find({ 'brand' : brand }).skip(offset).limit(limit).toArray();
-    }
-    else if (price != null)
-    {
-      products = await collection.find({ 'price' : { $lt: price } }).skip(offset).limit(limit).toArray();
-    }
-    else
-    {
-      products = await collection.find().skip(offset).limit(limit).toArray();
-      // var count = products.length; but without limit
-    }
-    console.log(products);
-    var result = products;
+    var mongo_query = `collection.find(filters).sort(sort).skip(offset).limit(limit).toArray();`;
+    console.log(mongo_query);
+    // var result = await eval(mongo_query);
+    var result = await collection.find(filters).sort(sort).skip(offset).limit(limit).toArray();
+    console.log(result);
     var count = await collection.count();
     var meta = paginate(page, count, result, limit);
     meta.pageSize = limit;
