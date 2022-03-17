@@ -66,10 +66,10 @@ const setCurrentProducts = ({result, meta}) => {
  * @param  {Number}  [size=12] - size of the page
  * @return {Object}
  */
-const fetchProducts = async (page = 1, size = 12) => {
+const fetchProducts = async (page = 1, limit = 12, sortby = 'none') => {
   try 
   {
-    const response = await fetch(API_URL + `products/search?page=${page}&limit=${size}`);
+    const response = await fetch(API_URL + `products/search?page=${page}&limit=${limit}&sortby=${sortby}`);
     const body = await response.json();
 
     if (body.success !== true) 
@@ -234,7 +234,7 @@ selectFilterBrand.addEventListener('change', event => {
 
 selectSort.addEventListener('change', event => {
   sort = event.target.value;
-  fetchProducts(1, currentPagination.pageSize)
+  fetchProducts(1, currentPagination.pageSize, sort)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
 });
