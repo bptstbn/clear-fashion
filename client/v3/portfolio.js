@@ -1,14 +1,7 @@
-const API_URL = 'https://clearfashionapi.vercel.app/';
-
-const { calculateLimitAndOffset, paginate } = require('paginate-info');
-
-const { limit, offset } = calculateLimitAndOffset(2, 20);
-
-console.log(limit);
-console.log(offset);
-
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 'use strict';
+
+const API_URL = 'https://clearfashionapi.vercel.app/';
 
 // current products on the page
 let currentProducts = [];
@@ -74,110 +67,26 @@ const setCurrentProducts = ({result, meta}) => {
  * @return {Object}
  */
 const fetchProducts = async (page = 1, size = 12) => {
-  try {
-    const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${1}&size=${139}`
-    );
+  try 
+  {
+    const response = await fetch(API_URL + `products/search?page=${page}&limit=${size}`);
     const body = await response.json();
 
-    if (body.success !== true) {
+    if (body.success !== true) 
+    {
       console.error(body);
       return {currentProducts, currentPagination};
     }
-    var result = body.data.result;
-    var meta = body.data.meta;
-    result = filterProductsByPrice(result);
-    result = filterProductsByReleaseDate(result);
-    result = filterProductsByBrand(result);
-    result = sortProducts(result);
-    meta.count = result.length;
-    body.data = {result, meta};
-    return sliceProducts(body.data, page, size);
-  } catch (error) {
+    
+    console.log(body.data.meta);
+    return body.data;
+  }
+  catch (error) 
+  {
     console.error(error);
     return {currentProducts, currentPagination};
   }
 };
-
-function sliceProducts(products, page, size)
-{
-  var result = products.result;
-  result = result.slice((page-1)*size, page*size);
-  var meta = products.meta;
-  meta.currentPage = page;
-  meta.pageSize = size;
-  meta.pageCount = Math.floor(1+meta.count/meta.pageSize);
-  var items = {result, meta};
-  return items;
-}
-
-function filterProductsByPrice(result)
-{
-  if (filterPrice == 'A')
-    {
-      result = result.filter(({ price }) => price <= 50);
-    }
-    else if (filterPrice == 'B')
-    {
-      result = result.filter(({ price }) => price > 50 && price <= 100);
-    }
-    else if (filterPrice == 'C')
-    {
-      result = result.filter(({ price }) => price > 100 && price <= 200);
-    }
-    else if (filterPrice == 'D')
-    {
-      result = result.filter(({ price }) => price > 200);
-    }
-    return result;
-}
-
-function filterProductsByReleaseDate(result)
-{
-  if (filterDate == 'A')
-    {
-      result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) <= 2);
-    }
-    else if (filterDate == 'B')
-    {
-      result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)).between(2, 26));
-    }
-    else if (filterDate == 'C')
-    {
-      result = result.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) > 26);
-    }
-    return result;
-}
-
-function filterProductsByBrand(result)
-{
-  if (filterBrand != '')
-  {
-    result = result.filter(({ brand }) => brand == filterBrand);
-  }
-  return result;
-}
-
-function sortProducts(result)
-{
-  if (sort == 'price-asc')
-  {
-    result = sortByCheap(result);
-  }
-  else if (sort == 'price-desc')
-  {
-    result = sortByCheap(result).reverse();
-  }
-  else if (sort == 'date-asc')
-  {
-    result = sortByRecent(result);
-  }
-  else if (sort == 'date-desc')
-  {
-    result = sortByRecent(result).reverse();
-  }
-  return result;
-}
 
 /**
  * Render list of products
@@ -245,7 +154,7 @@ const renderBrands = async(products) => {
 
 function pvalue(items, x)
 {
-  items = sortByCheap(items);
+  // items = sortByCheap(items);
   var p = Math.floor(items.length*(1-x));
   return items[p]['price'];
 }
@@ -261,7 +170,7 @@ const renderIndicators = (products, pagination) => {
   spanP50.innerHTML = pvalue(products, 0.5);
   spanP90.innerHTML = pvalue(products, 0.90);
   spanP95.innerHTML = pvalue(products, 0.95);
-  spanLastReleasedDate.innerHTML = sortByRecent(products)[0].released;
+  // spanLastReleasedDate.innerHTML = sortByRecent(products)[0].released;
 };
 
 const render = (products, pagination) => {
@@ -283,6 +192,8 @@ selectShow.addEventListener('change', event => {
   fetchProducts(1, parseInt(event.target.value))
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
+  });
+
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -327,26 +238,3 @@ selectSort.addEventListener('change', event => {
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
 });
-
-function sortByCheap(items)
-{
-  return items.sort(function(a, b) 
-  {
-    return parseFloat(a.price) - parseFloat(b.price);
-  });
-}
-
-function sortByRecent(items)
-{
-  return items.sort(function(a, b) 
-  {
-    return new Date(b.released) - new Date(a.released);
-  });
-}
-
-Number.prototype.between = function(a, b) 
-{
-  var min = Math.min.apply(Math, [a, b]);
-  var max = Math.max.apply(Math, [a, b]);
-  return this > min && this <= max;
-};

@@ -92,9 +92,16 @@ app.get("/products/search/", async (request, response) => {
     else
     {
       products = await collection.find().skip(offset).limit(limit).toArray();
+      // var count = products.length; but without limit
     }
     console.log(products);
-    response.send(products);
+    var result = products;
+    var count = await collection.count();
+    var meta = paginate(page, count, result, limit);
+    meta.pageSize = limit;
+    var data = {result, meta};
+    var success = true;
+    response.send({success, data});
   }
 
   catch (error) 
