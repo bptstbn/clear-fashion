@@ -98,12 +98,9 @@ app.get("/products/search/", async (request, response) => {
   const { offset } = calculateLimitAndOffset(page, limit);
   try
   {
-    var mongo_query = `collection.find(filters).sort(sort).skip(offset).limit(limit).toArray();`;
-    console.log(mongo_query);
-    // var result = await eval(mongo_query);
     var result = await collection.find(filters).sort(sort).skip(offset).limit(limit).toArray();
     console.log(result);
-    var count = await collection.count();
+    var count = await collection.find(filters).count();
     var meta = paginate(page, count, result, limit);
     meta.pageSize = limit;
     var data = {result, meta};
