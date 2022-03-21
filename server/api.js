@@ -9,7 +9,7 @@ const { calculateLimitAndOffset, paginate } = require('paginate-info');
 
 require('dotenv').config()
 const MONGODB_URI = process.env.MONGODB_URI;
-const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME;
+const MONGODB_DB_NAME = 'clearfashion';
 
 const PORT = 8092;
 
