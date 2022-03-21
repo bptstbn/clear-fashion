@@ -13,27 +13,6 @@ let filterBrand = '';
 let sort = '';
 
 
-const allProducts = async () => 
-{
-  try 
-  {
-    const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${1}&size=${139}`
-    );
-    const body = await response.json();
-
-    if (body.success !== true) 
-    {
-      console.error(body);
-    }
-    return body.data;
-  }
-  catch (error) 
-  {
-    console.error(error);
-  };
-};
-
 // instantiate the selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
