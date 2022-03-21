@@ -86,11 +86,29 @@ app.get("/products/search/", async (request, response) => {
     filters['brand'] = brand;
   }
   
-  var price;
-  if ('price' in request.query)
+  var minprice;
+  if ('minprice' in request.query)
   {
-    price = parseInt(request.query.price);
-    filters['price'] = { $lt: price };
+    minprice = parseInt(request.query.minprice);
+  }
+
+  var maxprice;
+  if ('maxprice' in request.query)
+  {
+    maxprice = parseInt(request.query.maxprice);
+  }
+
+  if (minprice != null || maxprice != null)
+  {
+    filters['price'] = {};
+    if (minprice != null)
+    {
+      filters['price']['$gt'] = minprice;
+    }
+    if (maxprice != null)
+    {
+      filters['price']['$lt'] = maxprice;
+    }
   }
   
   console.log(filters);
