@@ -127,4 +127,26 @@ app.get("/products/:id", async (request, response) => {
   });
 });
 
+app.get("/brands/", async (request, response) => {
+  console.log('In brands route ...');
+  var collection = await get_collection();
+  try
+  {
+    const brands = await collection.distinct("brand");
+    console.log(brands);
+    var result = new Array();
+    brands.forEach(brand =>
+    {
+      result.push(brand);
+    });
+    console.log(result);
+    response.send(result);
+  }
+  catch (error) 
+  {
+    console.log('In error for brands');
+    response.status(500).send(error);
+  }
+});
+
 console.log(`📡 Running on port ${PORT}`);

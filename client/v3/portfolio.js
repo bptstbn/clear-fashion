@@ -10,7 +10,6 @@ let currentPagination = {};
 let filterPrice = '';
 let filterDate = '';
 let filterBrand = '';
-let isFilteringByBrand = false;
 let sort = '';
 
 
@@ -69,7 +68,13 @@ const setCurrentProducts = ({result, meta}) => {
 const fetchProducts = async (page = 1, limit = 12, sortby = 'none') => {
   try 
   {
-    const response = await fetch(API_URL + `products/search?page=${page}&limit=${limit}&sortby=${sortby}`);
+    var url = API_URL + `products/search?page=${page}&limit=${limit}&sortby=${sortby}`;
+
+    if (filterBrand != '')
+    {
+      url += `&brand=${filterBrand}`;
+    }
+    const response = await fetch(url);
     const body = await response.json();
 
     if (body.success !== true) 
@@ -127,28 +132,32 @@ const renderPagination = pagination => {
   selectPage.selectedIndex = currentPage - 1;
 };
 
+
+const fetchBrands = async () => {
+  try 
+  {
+    const response = await fetch(API_URL + 'brands');
+    const body = await response.json();
+    return body;
+  }
+  catch (error) 
+  {
+    console.error(error);
+  }
+};
+
+
 const renderBrands = async(products) => {
-  const items = await allProducts();
-  var brands = new Set(items.result.map(item => item.brand))
-  brands = Array.from(brands);
+  var brands = await fetchBrands();
   brands.unshift('');
+  console.log(brands);
   const options = Array.from(
     {'length': brands.length},
     (value, index) => `<option value="${brands[index]}">${brands[index]}</option>`
   ).join('');
   selectFilterBrand.innerHTML = options;
   var selectedIndex = 0;
-  if (isFilteringByBrand)
-  {
-    try
-    {
-      selectedIndex = brands.indexOf(products[0].brand);
-    }
-    catch
-    {
-      selectedIndex = 0
-    }
-  }
+  selectedIndex = brands.indexOf(filterBrand);
   selectFilterBrand.selectedIndex = selectedIndex;
 };
 
@@ -226,7 +235,6 @@ selectFilterDate.addEventListener('change', event => {
 
 selectFilterBrand.addEventListener('change', event => {
   filterBrand = event.target.value;
-  isFilteringByBrand = (filterBrand != '');
   fetchProducts(1, currentPagination.pageSize)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
