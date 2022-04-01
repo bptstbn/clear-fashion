@@ -77,6 +77,12 @@ app.get("/products/search/", async (request, response) => {
     case 'pricedesc':
       sort = {price: -1};
       break;
+    case 'dateasc':
+      sort = {date: 1};
+      break;
+    case 'datedesc':
+      sort = {date: -1};
+      break;
   }
 
   var brand;
