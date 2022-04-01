@@ -168,11 +168,11 @@ function pvalue(items, x)
 const renderIndicators = (products, pagination) => {
   const {count} = pagination;
   spanNbProducts.innerHTML = count;
-  spanNbNewProducs.innerHTML = products.filter(({ released }) => ((new Date() - new Date(released)) / (1000 * 7 * 24 * 60 * 60)) <= 2).length;
+  spanNbNewProducs.innerHTML = products.filter(({ date }) => ((new Date() - new Date(date)) / (1000 * 7 * 24 * 60 * 60)) <= 2).length;
   spanP50.innerHTML = pvalue(products, 0.5);
   spanP90.innerHTML = pvalue(products, 0.90);
   spanP95.innerHTML = pvalue(products, 0.95);
-  spanLastReleasedDate.innerHTML = sortByRecent(products)[0].released;
+  spanLastReleasedDate.innerHTML = sortByRecent(products)[0].date;
 };
 
 const render = (products, pagination) => {
