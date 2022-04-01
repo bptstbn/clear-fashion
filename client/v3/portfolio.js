@@ -52,9 +52,8 @@ const fetchProducts = async (page = 1, limit = 12) => {
     var url = API_URL + `products/search?page=${page}&limit=${limit}`;
     if (filterPrice != '')
     {
-      console.log(filterPrice);
-      console.log(priceDict[filterPrice].min);
-      console.log(priceDict[filterPrice].max);
+      url += `&minprice=${priceDict[filterPrice].min}`
+      url += `&maxprice=${priceDict[filterPrice].max}`
     }
     if (filterBrand != '')
     {
