@@ -11,6 +11,10 @@ let filterPrice = '';
 let filterBrand = '';
 let sort = '';
 
+let priceDict = { 'A' : {'min': null, 'max': 50},
+                  'B' : {'min': 50, 'max': 100},
+                  'C' : {'min': 100, 'max': 200},
+                  'D' : {'min': 200, 'max': null} }
 
 // instantiate the selectors
 const selectShow = document.querySelector('#show-select');
@@ -49,6 +53,7 @@ const fetchProducts = async (page = 1, limit = 12) => {
     if (filterPrice != '')
     {
       console.log(filterPrice);
+      console.log(priceDict.filterPrice);
     }
     if (filterBrand != '')
     {
