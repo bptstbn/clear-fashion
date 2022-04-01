@@ -52,8 +52,14 @@ const fetchProducts = async (page = 1, limit = 12) => {
     var url = API_URL + `products/search?page=${page}&limit=${limit}`;
     if (filterPrice != '')
     {
-      url += `&minprice=${priceDict[filterPrice].min}`
-      url += `&maxprice=${priceDict[filterPrice].max}`
+      if (priceDict[filterPrice].min != null)
+      {
+        url += `&minprice=${priceDict[filterPrice].min}`
+      }
+      if (priceDict[filterPrice].max != null)
+      {
+        url += `&maxprice=${priceDict[filterPrice].max}`
+      }
     }
     if (filterBrand != '')
     {
