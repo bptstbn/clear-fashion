@@ -10,7 +10,6 @@ async function insert(products)
     const db = client.db(MONGODB_DB_NAME);
     const collection = db.collection('products');
     var result = await collection.insertMany(products);
-    //console.log(result);
 }
 
 module.exports.insert = insert;

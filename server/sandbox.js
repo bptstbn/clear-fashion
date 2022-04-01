@@ -1,25 +1,34 @@
-/* eslint-disable no-console, no-process-exit */
-const dedicatedbrand = require('./sources/dedicatedbrand');
-const loom = require('./sources/loom');
 const mongo = require('./mongo')
 
-//async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/all-men') {
-async function sandbox (eshop = 'https://www.loom.fr/collections/tous-les-vetements') {
-  try {
-    console.log(`🕵️‍♀️  browsing ${eshop} source`);
+const dedicatedbrand = require('./sources/dedicatedbrand');
+const adresse = require('./sources/adresse');
+const loom = require('./sources/loom');
 
-    const products = await loom.scrape(eshop);
+const sites = [{eshop : 'https://www.dedicatedbrand.com/en/men/all-men', module : dedicatedbrand},
+             {eshop : 'https://adresse.paris/630-toute-la-collection', module : adresse},
+             {eshop : 'https://www.loom.fr/collections/tous-les-vetements', module : loom}];
 
-    console.log(products);
-    await mongo.insert(products);
-    console.log('done');
-    process.exit(0);
-  } catch (e) {
-    console.error(e);
-    process.exit(1);
-  }
+
+console.log(sites);
+
+async function sandbox(site) 
+{
+    var eshop = site.eshop;
+    module = site.module;
+    try 
+    {
+        console.log(`🕵️‍♀️  browsing ${eshop} source`);
+        const products = await module.scrape(eshop);
+        console.log(products);
+        await mongo.insert(products);
+        console.log('done');
+    }
+    catch (e) 
+    {
+        console.error(e);
+        process.exit(1);
+    }
 }
 
-const [,, eshop] = process.argv;
 
-sandbox(eshop);
+sites.forEach(site => sandbox(site))
