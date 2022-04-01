@@ -46,14 +46,17 @@ const fetchProducts = async (page = 1, limit = 12) => {
   try 
   {
     var url = API_URL + `products/search?page=${page}&limit=${limit}`;
-
-    if (sort != '')
+    if (filterPrice != '')
     {
-      url += `&sortby=${sort}`
+      console.log(filterPrice);
     }
     if (filterBrand != '')
     {
       url += `&brand=${filterBrand}`;
+    }
+    if (sort != '')
+    {
+      url += `&sortby=${sort}`
     }
     const response = await fetch(url);
     const body = await response.json();
