@@ -157,7 +157,7 @@ const renderBrands = async(products) => {
 function pvalue(items, x)
 {
   items = sortByCheap(items);
-  var p = Math.floor(items.length*(1-x));
+  var p = Math.floor(items.length*x);
   return items[p]['price'];
 }
 
