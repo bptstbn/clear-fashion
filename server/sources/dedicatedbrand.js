@@ -31,8 +31,9 @@ const parse = data => {
         link = 'undefined';
       }
       const brand = 'dedicated';
+      const date = new Date().toISOString().split('T')[0];
       const _id = uuidv5(link, uuidv5.URL);
-      return {name, price, link, brand, _id};
+      return {name, price, link, brand, date, _id};
     })
     .get();
 };

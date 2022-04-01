@@ -8,7 +8,6 @@ let currentProducts = [];
 let currentPagination = {};
 
 let filterPrice = '';
-let filterDate = '';
 let filterBrand = '';
 let sort = '';
 
@@ -18,7 +17,6 @@ const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const selectSort = document.querySelector('#sort-select');
 const selectFilterPrice = document.querySelector('#filter-price-select');
-const selectFilterDate = document.querySelector('#filter-date-select');
 const selectFilterBrand = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
@@ -204,13 +202,6 @@ selectPage.addEventListener('change', event => {
 
 selectFilterPrice.addEventListener('change', event => {
   filterPrice = event.target.value;
-  fetchProducts(1, currentPagination.pageSize)
-    .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination));
-});
-
-selectFilterDate.addEventListener('change', event => {
-  filterDate = event.target.value;
   fetchProducts(1, currentPagination.pageSize)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));

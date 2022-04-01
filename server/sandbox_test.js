@@ -2,11 +2,12 @@ const mongo = require('./mongo')
 
 const dedicatedbrand = require('./sources/dedicatedbrand');
 const adresse = require('./sources/adresse');
-const montlimart = require('./sources/montlimart');
+// const montlimart = require('./sources/montlimart');
+const loom = require('./sources/loom');
 
 const sites = [{eshop : 'https://www.dedicatedbrand.com/en/men/all-men', module : dedicatedbrand},
              {eshop : 'https://adresse.paris/630-toute-la-collection', module : adresse},
-             {eshop : 'https://www.montlimart.com/toute-la-collection.html?limit=all', module : montlimart}];
+             {eshop : 'https://www.loom.fr/collections/tous-les-vetements', module : loom}];
 
 
 console.log(sites);
