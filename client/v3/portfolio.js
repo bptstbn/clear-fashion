@@ -53,7 +53,7 @@ const fetchProducts = async (page = 1, limit = 12) => {
     if (filterPrice != '')
     {
       console.log(filterPrice);
-      console.log(priceDict.filterPrice);
+      console.log(priceDict[filterPrice]);
     }
     if (filterBrand != '')
     {
