@@ -1,14 +1,14 @@
 [
-  {
-    "brand": "DEDICATED",
-    "rating": 78
-  },
-  {
-    "brand": "Montlimart",
-    "rating": 76
-  },
-  {
-    "brand": "ADRESSE Paris",
-    "rating": 65
-  }
-]
+    {
+      "brand": "DEDICATED",
+      "rating": 78
+    },
+    {
+      "brand": "Loom",
+      "rating": 76
+    },
+    {
+      "brand": "ADRESSE Paris",
+      "rating": 65
+    }
+  ]
