@@ -173,6 +173,7 @@ const renderIndicators = (products, pagination) => {
   spanP90.innerHTML = pvalue(products, 0.90);
   spanP95.innerHTML = pvalue(products, 0.95);
   spanLastReleasedDate.innerHTML = sortByRecent(products)[0].date;
+  console.log(sortByRecent(products)[0])
 };
 
 const render = (products, pagination) => {
