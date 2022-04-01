@@ -78,7 +78,6 @@ const fetchProducts = async (page = 1, limit = 12) => {
       return {currentProducts, currentPagination};
     }
     
-    console.log(body.data.meta);
     return body.data;
   }
   catch (error) 
@@ -145,7 +144,6 @@ const fetchBrands = async () => {
 const renderBrands = async(products) => {
   var brands = await fetchBrands();
   brands.unshift('');
-  console.log(brands);
   const options = Array.from(
     {'length': brands.length},
     (value, index) => `<option value="${brands[index]}">${brands[index]}</option>`
