@@ -156,7 +156,7 @@ const renderBrands = async(products) => {
 
 function pvalue(items, x)
 {
-  // items = sortByCheap(items);
+  items = sortByCheap(items);
   var p = Math.floor(items.length*(1-x));
   return items[p]['price'];
 }
@@ -172,7 +172,7 @@ const renderIndicators = (products, pagination) => {
   spanP50.innerHTML = pvalue(products, 0.5);
   spanP90.innerHTML = pvalue(products, 0.90);
   spanP95.innerHTML = pvalue(products, 0.95);
-  // spanLastReleasedDate.innerHTML = sortByRecent(products)[0].released;
+  spanLastReleasedDate.innerHTML = sortByRecent(products)[0].released;
 };
 
 const render = (products, pagination) => {
@@ -200,7 +200,6 @@ selectShow.addEventListener('change', event => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const products = await fetchProducts();
-
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
@@ -232,3 +231,20 @@ selectSort.addEventListener('change', event => {
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
 });
+
+
+function sortByCheap(items)
+{
+  return items.sort(function(a, b) 
+  {
+    return parseFloat(a.price) - parseFloat(b.price);
+  });
+}
+
+function sortByRecent(items)
+{
+  return items.sort(function(a, b) 
+  {
+    return new Date(b.date) - new Date(a.date);
+  });
+}
